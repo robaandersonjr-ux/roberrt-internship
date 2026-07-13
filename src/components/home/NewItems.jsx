@@ -4,7 +4,8 @@ import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
-const calcTime = useCallback(() => {
+const Countdown = ({ expiryDate }) => {
+  const calcTime = useCallback(() => {
     const diff = expiryDate - Date.now();
     if (diff <= 0) return null;
     const h = Math.floor(diff / 3600000);
@@ -22,8 +23,7 @@ const calcTime = useCallback(() => {
       if (!t) clearInterval(timer);
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
-}, [calcTime]);
+  }, [calcTime]);
 
   if (!time) return null;
   return <div className="de_countdown">{time}</div>;
