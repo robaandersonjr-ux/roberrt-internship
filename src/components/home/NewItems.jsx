@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
-const Countdown = ({ expiryDate }) => {
-  const calcTime = () => {
+const calcTime = useCallback(() => {
     const diff = expiryDate - Date.now();
     if (diff <= 0) return null;
     const h = Math.floor(diff / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
     const s = Math.floor((diff % 60000) / 1000);
     return `${h}h ${m}m ${s}s`;
-  };
+  }, [expiryDate]);
 
   const [time, setTime] = useState(calcTime);
 
@@ -24,6 +23,7 @@ const Countdown = ({ expiryDate }) => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+}, [calcTime]);
 
   if (!time) return null;
   return <div className="de_countdown">{time}</div>;

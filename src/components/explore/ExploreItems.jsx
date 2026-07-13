@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 const Countdown = ({ expiryDate }) => {
@@ -11,16 +11,14 @@ const Countdown = ({ expiryDate }) => {
     return `${h}h ${m}m ${s}s`;
   };
 
-  const [time, setTime] = useState(calcTime);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const t = calcTime();
-      setTime(t);
-      if (!t) clearInterval(timer);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+ const calcTime = useCallback(() => {
+    const diff = expiryDate - Date.now();
+    if (diff <= 0) return null;
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    return `${h}h ${m}m ${s}s`;
+  }, [expiryDate]);
 
   if (!time) return null;
   return <div className="de_countdown">{time}</div>;
